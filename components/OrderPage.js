@@ -1,5 +1,6 @@
 import { $, el, fromTemplate, renderEl } from "../lib/el.js";
 import { loadCSS } from "../lib/loadCSS.js";
+import { useFormBinding } from "../lib/useFormBinding.js";
 
 export class OrderPage extends HTMLElement {
   #user = {
@@ -58,13 +59,14 @@ export class OrderPage extends HTMLElement {
     let section = $("section", this.root);
     renderEl(getSectionContent(), section);
 
-    this.setFormBindings($("form", this.root));
-  }
+    const form = $("form", this.root);
 
-  setFormBindings(form) {
-    if (!form) return;
+    if (!form) {
+      return;
+    }
 
-    // Double data binding
+    this.#user = useFormBinding(form, this.#user);
+
     form.addEventListener("submit", (event) => {
       event.preventDefault();
       alert(`Thanks for your order ${this.#user.name}`);
@@ -74,24 +76,6 @@ export class OrderPage extends HTMLElement {
       this.#user.phone = "";
 
       // TODO Send data to the server
-    });
-
-    this.#user = new Proxy(this.#user, {
-      set(target, property, value) {
-        console.log(property, value);
-
-        target[property] = value;
-
-        form.elements[property].value = value;
-
-        return true;
-      },
-    });
-
-    Array.from(form.elements).forEach((element) => {
-      element.addEventListener("change", (event) => {
-        this.#user[element.name] = event.target.value;
-      });
     });
   }
 }

@@ -1,4 +1,4 @@
-import { fromTemplate, renderEl } from "../lib/el.js";
+import { $, fromTemplate, renderEl } from "../lib/el.js";
 import { addToCart } from "../services/Order.js";
 
 export class ProductItem extends HTMLElement {

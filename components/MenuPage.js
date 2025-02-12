@@ -5,16 +5,14 @@ export class MenuPage extends HTMLElement {
   constructor() {
     super();
     this.root = this.attachShadow({ mode: "open" });
-
-    const style = el("style");
-    loadCSS("/components/MenuPage.css", style);
-
-    renderEl(style, this.root);
   }
 
   connectedCallback() {
     const content = fromTemplate("menu-page-template");
-    renderEl(content, this.root);
+    const style = el("style");
+    loadCSS("/components/MenuPage.css", style);
+
+    renderEl([style, content], this.root);
 
     window.addEventListener("appmenuchange", () => {
       this.render();
