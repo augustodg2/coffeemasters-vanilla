@@ -34,8 +34,6 @@ If you prefer to use the node `serve` package with npx by running:
 npx serve
 ```
 
-> ---
->
 > ### Disclaimer
 >
 > This repo was created on top of the base repo for the [Vanilla JS: You Might Not Need a Framework][course] course on Frontend Masters.
@@ -43,8 +41,6 @@ npx serve
 > [![Frontend Masters](images/FrontendMastersLogo.png)][fem]
 >
 > [Please click here][website] to head to the course website.
->
-> ---
 
 [fem]: https://www.frontendmasters.com
 [website]: https://firtman.github.io/vanilla/
