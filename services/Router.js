@@ -35,8 +35,17 @@ const Router = {
         break;
 
       default:
+        if (path.startsWith("/product/")) {
+          pageElement = document.createElement("h1");
+          pageElement.textContent = "Details";
+          const paramId = path.substring(path.lastIndexOf("/") + 1);
+          pageElement.dataset.id = paramId;
+          break;
+        }
+
         pageElement = document.createElement("h1");
         pageElement.textContent = "404: Page not found";
+        break;
     }
 
     if (pageElement != null) {
