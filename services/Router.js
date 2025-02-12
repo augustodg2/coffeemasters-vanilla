@@ -1,3 +1,5 @@
+import { routes } from "../routes.js";
+
 const Router = {
   init() {
     document.querySelectorAll("a.navlink").forEach((link) => {
@@ -20,44 +22,73 @@ const Router = {
     this.go(location.pathname, false);
   },
 
+  matchRoute(route, path) {
+    const paramRegex = /(?<=\{)[^{}]*(?=\})/g;
+    const paramMatches = route.path.matchAll(paramRegex);
+
+    if (paramMatches.length < 1) {
+      return {
+        matches: true,
+        params: {},
+      };
+    }
+
+    const routeSegments = route.path.split("/");
+    const pathSegments = path.split("/");
+
+    if (routeSegments.length !== pathSegments.length) {
+      return {
+        matches: false,
+        params: {},
+      };
+    }
+
+    const params = {};
+
+    const segmentsMatch = routeSegments.every((routeSegment, i) => {
+      const result = routeSegment.match(paramRegex);
+      const param = result?.[0];
+
+      if (param) {
+        params[param] = pathSegments[i];
+        return true;
+      }
+
+      return routeSegment === pathSegments[i];
+    });
+
+    return {
+      matches: segmentsMatch,
+      params: segmentsMatch ? params : {},
+    };
+  },
+
   go(path, addToHistory = true) {
     if (addToHistory) {
       history.pushState({ path }, null, path);
     }
 
     let pageElement = null;
-    switch (path) {
-      case "/":
-        pageElement = document.createElement("h1");
-        pageElement.textContent = "Home";
-        break;
-      case "/order":
-        pageElement = document.createElement("h1");
-        pageElement.textContent = "Your Order";
-        break;
 
-      default:
-        if (path.startsWith("/product/")) {
-          pageElement = document.createElement("h1");
-          pageElement.textContent = "Details";
-          const paramId = path.substring(path.lastIndexOf("/") + 1);
-          pageElement.dataset.id = paramId;
-          break;
-        }
+    routes.forEach((route) => {
+      const { matches, params } = this.matchRoute(route, path);
 
-        pageElement = document.createElement("h1");
-        pageElement.textContent = "404: Page not found";
-        break;
+      if (matches) {
+        pageElement = route.getElement(params);
+      }
+    });
+
+    if (!pageElement) {
+      pageElement = document.createElement("h1");
+      pageElement.textContent = "404: not found";
     }
 
-    if (pageElement != null) {
-      const main = document.querySelector("main");
-      // main.children[0].remove();
-      main.innerHTML = "";
-      main.appendChild(pageElement);
-      window.scrollX = 0;
-      window.scrollY = 0;
-    }
+    const main = document.querySelector("main");
+    // main.children[0].remove();
+    main.innerHTML = "";
+    main.appendChild(pageElement);
+    window.scrollX = 0;
+    window.scrollY = 0;
   },
 };
 
