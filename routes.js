@@ -3,8 +3,6 @@ export const routes = [
     path: "/",
     getElement: () => {
       const pageElement = document.createElement("menu-page");
-      pageElement.textContent = "Home";
-
       return pageElement;
     },
   },
