@@ -4,7 +4,7 @@ During this course, I had the opportunity to review some important concepts, suc
 
 The course explored different patterns and techniques, focusing in giving you the tools to build a single-page application without the need of a framework.
 
-After completing it, I created a set of utility functions that I found useful, and refactored the code to use them. The result is my own micro-library that can be used to modern web apps.
+After completing it, I created a set of utility functions that I found useful, and refactored the code to use them. The result is my own micro-library that can be used to build modern web apps.
 
 ## Features
 
