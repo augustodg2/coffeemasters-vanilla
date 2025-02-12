@@ -1,11 +1,5 @@
-import { $, el, renderEl } from "../lib/el.js";
-
-let css;
-
-async function loadCSS() {
-  const request = await fetch("/components/OrderPage.css");
-  css = await request.text();
-}
+import { $, el, fromTemplate, renderEl } from "../lib/el.js";
+import { loadCSS } from "../lib/loadCSS.js";
 
 export class OrderPage extends HTMLElement {
   #user = {
@@ -19,14 +13,7 @@ export class OrderPage extends HTMLElement {
 
     this.root = this.attachShadow({ mode: "open" });
     const style = el("style");
-
-    if (css) {
-      style.textContent = css;
-    } else {
-      loadCSS().then(() => {
-        style.textContent = css;
-      });
-    }
+    loadCSS("/components/OrderPage.css", style);
 
     renderEl([style, el("section")], this.root);
   }
@@ -63,7 +50,7 @@ export class OrderPage extends HTMLElement {
         ]),
       ]);
 
-      const orderForm = $("#order-form-template").content.cloneNode(true);
+      const orderForm = fromTemplate("order-form-template");
 
       return [el("h2", {}, "Your Order"), order, orderForm];
     };

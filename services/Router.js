@@ -1,3 +1,4 @@
+import { renderEl } from "../lib/el.js";
 import { routes } from "../routes.js";
 
 const Router = {
@@ -84,9 +85,8 @@ const Router = {
     }
 
     const main = document.querySelector("main");
-    // main.children[0].remove();
-    main.innerHTML = "";
-    main.appendChild(pageElement);
+
+    renderEl(pageElement, main);
     window.scrollX = 0;
     window.scrollY = 0;
   },

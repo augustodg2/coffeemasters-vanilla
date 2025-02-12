@@ -1,29 +1,17 @@
-import { $, el, renderEl } from "../lib/el.js";
+import { $, el, fromTemplate, renderEl } from "../lib/el.js";
+import { loadCSS } from "../lib/loadCSS.js";
 import { getProductById } from "../services/Menu.js";
 import { addToCart } from "../services/Order.js";
 
-let css;
-
-async function loadCSS() {
-  const request = await fetch("/components/DetailsPage.css");
-  css = await request.text();
-}
 export class DetailsPage extends HTMLElement {
   constructor() {
     super();
 
     this.root = this.attachShadow({ mode: "open" });
 
-    const content = $("#details-page-template").content.cloneNode(true);
+    const content = fromTemplate("details-page-template");
     const style = el("style");
-
-    if (css) {
-      style.textContent = css;
-    } else {
-      loadCSS().then(() => {
-        style.textContent = css;
-      });
-    }
+    loadCSS("/components/DetailsPage.css", style);
 
     renderEl([style, content], this.root);
   }

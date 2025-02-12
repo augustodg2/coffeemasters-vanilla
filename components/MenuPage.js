@@ -1,11 +1,5 @@
-import { $, el, renderEl } from "../lib/el.js";
-
-let css;
-
-async function loadCSS() {
-  const request = await fetch("/components/MenuPage.css");
-  css = await request.text();
-}
+import { $, el, fromTemplate, renderEl } from "../lib/el.js";
+import { loadCSS } from "../lib/loadCSS.js";
 
 export class MenuPage extends HTMLElement {
   constructor() {
@@ -13,21 +7,14 @@ export class MenuPage extends HTMLElement {
     this.root = this.attachShadow({ mode: "open" });
 
     const style = el("style");
-
-    if (css) {
-      style.textContent = css;
-    } else {
-      loadCSS().then(() => {
-        style.textContent = css;
-      });
-    }
+    loadCSS("/components/MenuPage.css", style);
 
     renderEl(style, this.root);
   }
 
   connectedCallback() {
-    const content = $("#menu-page-template").content.cloneNode(true);
-    this.root.appendChild(content);
+    const content = fromTemplate("menu-page-template");
+    renderEl(content, this.root);
 
     window.addEventListener("appmenuchange", () => {
       this.render();
@@ -37,6 +24,8 @@ export class MenuPage extends HTMLElement {
   }
 
   render() {
+    const menu = $("#menu", this.root);
+
     const getMenuContent = () => {
       if (!app.store.menu) {
         return "Loading...";
@@ -58,7 +47,6 @@ export class MenuPage extends HTMLElement {
       });
     };
 
-    const menu = $("#menu", this.root);
     renderEl(getMenuContent(), menu);
   }
 }

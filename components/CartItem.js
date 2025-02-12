@@ -1,4 +1,4 @@
-import { $, renderEl } from "../lib/el.js";
+import { $, fromTemplate, renderEl } from "../lib/el.js";
 import { removeFromCart } from "../services/Order.js";
 
 export class CartItem extends HTMLElement {
@@ -9,16 +9,16 @@ export class CartItem extends HTMLElement {
   connectedCallback() {
     const item = JSON.parse(this.dataset.item);
 
-    const content = $("#cart-item-template").content.cloneNode(true);
+    const content = fromTemplate("cart-item-template");
 
-    renderEl(content, this);
-
-    $(".qty", this).textContent = `${item.quantity}x`;
-    $(".name", this).textContent = item.product.name;
-    $(".price", this).textContent = `$${item.product.price.toFixed(2)}`;
-    $("a.delete-button", this).addEventListener("click", () => {
+    $(".qty", content).textContent = `${item.quantity}x`;
+    $(".name", content).textContent = item.product.name;
+    $(".price", content).textContent = `$${item.product.price.toFixed(2)}`;
+    $("a.delete-button", content).addEventListener("click", () => {
       removeFromCart(item.product.id);
     });
+
+    renderEl(content, this);
   }
 }
 

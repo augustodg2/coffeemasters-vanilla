@@ -1,3 +1,4 @@
+import { fromTemplate, renderEl } from "../lib/el.js";
 import { addToCart } from "../services/Order.js";
 
 export class ProductItem extends HTMLElement {
@@ -6,16 +7,14 @@ export class ProductItem extends HTMLElement {
   }
 
   connectedCallback() {
-    const template = document.getElementById("product-item-template");
-    const content = template.content.cloneNode(true);
-
-    this.appendChild(content);
+    const content = fromTemplate("product-item-template");
 
     const product = JSON.parse(this.dataset.product);
-    this.querySelector("h4").textContent = product.name;
-    this.querySelector("p.price").textContent = `$${product.price.toFixed(2)}`;
-    this.querySelector("img").src = `/data/images/${product.image}`;
-    this.querySelector("a").addEventListener("click", (event) => {
+
+    $("h4", content).textContent = product.name;
+    $("p.price", content).textContent = `$${product.price.toFixed(2)}`;
+    $("img", content).src = `/data/images/${product.image}`;
+    $("a", content).addEventListener("click", (event) => {
       console.log(event.target.tagName);
       if (event.target.tagName.toLowerCase() === "button") {
         addToCart(product.id);
@@ -24,6 +23,8 @@ export class ProductItem extends HTMLElement {
       }
       event.preventDefault();
     });
+
+    renderEl(content, this);
   }
 }
 
