@@ -1,3 +1,4 @@
+export { CartItem } from "./CartItem.js";
 export { DetailsPage } from "./DetailsPage.js";
 export { MenuPage } from "./MenuPage.js";
 export { OrderPage } from "./OrderPage.js";
