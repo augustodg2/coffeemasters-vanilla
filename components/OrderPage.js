@@ -1,4 +1,10 @@
 export class OrderPage extends HTMLElement {
+  #user = {
+    name: "",
+    phone: "",
+    email: "",
+  };
+
   constructor() {
     super();
 
@@ -55,6 +61,42 @@ export class OrderPage extends HTMLElement {
             </li>                
         `;
     }
+
+    this.setFormBindings(this.root.querySelector("form"));
+  }
+
+  setFormBindings(form) {
+    if (!form) return;
+
+    // Double data binding
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      alert(`Thanks for your order ${this.#user.name}`);
+
+      this.#user.name = "";
+      this.#user.email = "";
+      this.#user.phone = "";
+
+      // TODO Send data to the server
+    });
+
+    this.#user = new Proxy(this.#user, {
+      set(target, property, value) {
+        console.log(property, value);
+
+        target[property] = value;
+
+        form.elements[property].value = value;
+
+        return true;
+      },
+    });
+
+    Array.from(form.elements).forEach((element) => {
+      element.addEventListener("change", (event) => {
+        this.#user[element.name] = event.target.value;
+      });
+    });
   }
 }
 customElements.define("order-page", OrderPage);

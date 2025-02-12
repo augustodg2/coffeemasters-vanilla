@@ -1,5 +1,3 @@
-import { loadData } from "../services/Menu.js";
-
 export class MenuPage extends HTMLElement {
   constructor() {
     super();
@@ -26,7 +24,7 @@ export class MenuPage extends HTMLElement {
       this.render();
     });
 
-    loadData();
+    this.render();
   }
 
   render() {
