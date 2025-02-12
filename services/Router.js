@@ -15,8 +15,8 @@ const Router = {
       });
     });
 
-    window.addEventListener("popstate", (event) => {
-      this.go(event.state.path, false);
+    window.addEventListener("popstate", () => {
+      this.go(location.pathname, false);
     });
 
     this.go(location.pathname, false);

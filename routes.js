@@ -2,7 +2,7 @@ export const routes = [
   {
     path: "/",
     getElement: () => {
-      const pageElement = document.createElement("h1");
+      const pageElement = document.createElement("menu-page");
       pageElement.textContent = "Home";
 
       return pageElement;
@@ -11,7 +11,7 @@ export const routes = [
   {
     path: "/order",
     getElement: () => {
-      const pageElement = document.createElement("h1");
+      const pageElement = document.createElement("order-page");
       pageElement.textContent = "Your Order";
 
       return pageElement;
@@ -20,7 +20,7 @@ export const routes = [
   {
     path: "/details/{id}",
     getElement: (params) => {
-      const pageElement = document.createElement("h1");
+      const pageElement = document.createElement("details-page");
       pageElement.textContent = "Details";
 
       Object.assign(pageElement.dataset, {
