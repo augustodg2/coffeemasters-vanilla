@@ -13,14 +13,16 @@ const Router = {
       });
     });
 
-    Router.go(location.pathname, false);
+    window.addEventListener("popstate", (event) => {
+      this.go(event.state.path, false);
+    });
+
+    this.go(location.pathname, false);
   },
 
   go(path, addToHistory = true) {
     if (addToHistory) {
       history.pushState({ path }, null, path);
-    } else {
-      history.replaceState({ path }, null, path);
     }
 
     let pageElement = null;
