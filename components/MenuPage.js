@@ -1,3 +1,5 @@
+import { $, el, renderEl } from "../lib/el.js";
+
 let css;
 
 async function loadCSS() {
@@ -10,8 +12,7 @@ export class MenuPage extends HTMLElement {
     super();
     this.root = this.attachShadow({ mode: "open" });
 
-    const style = document.createElement("style");
-    this.root.appendChild(style);
+    const style = el("style");
 
     if (css) {
       style.textContent = css;
@@ -20,11 +21,12 @@ export class MenuPage extends HTMLElement {
         style.textContent = css;
       });
     }
+
+    renderEl(style, this.root);
   }
 
   connectedCallback() {
-    const template = document.getElementById("menu-page-template");
-    const content = template.content.cloneNode(true);
+    const content = $("#menu-page-template").content.cloneNode(true);
     this.root.appendChild(content);
 
     window.addEventListener("appmenuchange", () => {
@@ -35,32 +37,29 @@ export class MenuPage extends HTMLElement {
   }
 
   render() {
-    const menu = this.root.querySelector("#menu");
-    if (app.store.menu) {
-      menu.innerHTML = "";
-      for (let category of app.store.menu) {
-        const liCategory = document.createElement("li");
-
-        liCategory.innerHTML = `
-                <h3>${category.name}</h3>
-                <ul class="category">
-                </ul>
-            `;
-
-        const productList = liCategory.querySelector("ul");
-
-        for (let product of category.products) {
-          const item = document.createElement("product-item");
-          item.dataset.product = JSON.stringify(product);
-
-          productList.appendChild(item);
-        }
-
-        menu.appendChild(liCategory);
+    const getMenuContent = () => {
+      if (!app.store.menu) {
+        return "Loading...";
       }
-    } else {
-      menu.innerHTML = "Loading...";
-    }
+
+      return app.store.menu.map((category) => {
+        const productList = category.products.map((product) =>
+          el("product-item", {
+            dataset: {
+              product: JSON.stringify(product),
+            },
+          })
+        );
+
+        return el("li", {}, [
+          el("h3", {}, category.name),
+          el("ul", { className: "category" }, productList),
+        ]);
+      });
+    };
+
+    const menu = $("#menu", this.root);
+    renderEl(getMenuContent(), menu);
   }
 }
 

@@ -1,3 +1,4 @@
+import { $, renderEl } from "../lib/el.js";
 import { removeFromCart } from "../services/Order.js";
 
 export class CartItem extends HTMLElement {
@@ -7,19 +8,15 @@ export class CartItem extends HTMLElement {
 
   connectedCallback() {
     const item = JSON.parse(this.dataset.item);
-    this.innerHTML = ""; // Clear the element
 
-    const template = document.getElementById("cart-item-template");
-    const content = template.content.cloneNode(true);
+    const content = $("#cart-item-template").content.cloneNode(true);
 
-    this.appendChild(content);
+    renderEl(content, this);
 
-    this.querySelector(".qty").textContent = `${item.quantity}x`;
-    this.querySelector(".name").textContent = item.product.name;
-    this.querySelector(".price").textContent = `$${item.product.price.toFixed(
-      2
-    )}`;
-    this.querySelector("a.delete-button").addEventListener("click", (event) => {
+    $(".qty", this).textContent = `${item.quantity}x`;
+    $(".name", this).textContent = item.product.name;
+    $(".price", this).textContent = `$${item.product.price.toFixed(2)}`;
+    $("a.delete-button", this).addEventListener("click", () => {
       removeFromCart(item.product.id);
     });
   }

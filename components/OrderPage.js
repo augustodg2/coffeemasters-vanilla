@@ -1,3 +1,5 @@
+import { $, el, renderEl } from "../lib/el.js";
+
 let css;
 
 async function loadCSS() {
@@ -16,19 +18,17 @@ export class OrderPage extends HTMLElement {
     super();
 
     this.root = this.attachShadow({ mode: "open" });
-    const styles = document.createElement("style");
+    const style = el("style");
 
     if (css) {
-      styles.textContent = css;
+      style.textContent = css;
     } else {
       loadCSS().then(() => {
-        styles.textContent = css;
+        style.textContent = css;
       });
     }
 
-    this.root.appendChild(styles);
-    const section = document.createElement("section");
-    this.root.appendChild(section);
+    renderEl([style, el("section")], this.root);
   }
 
   connectedCallback() {
@@ -39,40 +39,39 @@ export class OrderPage extends HTMLElement {
   }
 
   render() {
-    let section = this.root.querySelector("section");
-    if (app.store.cart.length == 0) {
-      section.innerHTML = `
-          <p class="empty">Your order is empty</p>
-      `;
-    } else {
-      let html = `
-          <h2>Your Order</h2>
-          <ul>
-          </ul>
-      `;
-      section.innerHTML = html;
-
-      const template = document.getElementById("order-form-template");
-      const content = template.content.cloneNode(true);
-      section.appendChild(content);
-
-      let total = 0;
-      for (let prodInCart of app.store.cart) {
-        const item = document.createElement("cart-item");
-        item.dataset.item = JSON.stringify(prodInCart);
-        this.root.querySelector("ul").appendChild(item);
-
-        total += prodInCart.quantity * prodInCart.product.price;
+    const getSectionContent = () => {
+      if (app.store.cart.length == 0) {
+        return el("p", { className: "empty" }, "Your order is empty");
       }
-      this.root.querySelector("ul").innerHTML += `
-            <li>
-                <p class='total'>Total</p>
-                <p class='price-total'>$${total.toFixed(2)}</p>
-            </li>                
-        `;
-    }
 
-    this.setFormBindings(this.root.querySelector("form"));
+      let orderTotal = 0;
+      const cartItems = app.store.cart.map((item) => {
+        orderTotal += item.quantity * item.product.price;
+
+        return el("cart-item", {
+          dataset: {
+            item: JSON.stringify(item),
+          },
+        });
+      });
+
+      const order = el("ul", {}, [
+        ...cartItems,
+        el("li", {}, [
+          el("p", { className: "total" }, "Total"),
+          el("p", { className: "price-total" }, `$${orderTotal.toFixed(2)}`),
+        ]),
+      ]);
+
+      const orderForm = $("#order-form-template").content.cloneNode(true);
+
+      return [el("h2", {}, "Your Order"), order, orderForm];
+    };
+
+    let section = $("section", this.root);
+    renderEl(getSectionContent(), section);
+
+    this.setFormBindings($("form", this.root));
   }
 
   setFormBindings(form) {
