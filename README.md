@@ -1,6 +1,6 @@
 # Vanilla JS: You Might Not Need a Framework
 
-During this course, I had the opportunity to revist some important concepts, such as Web Components, Client-side routing, and State Management, and how to implement them using vanilla JavaScript.
+During this course, I had the opportunity to review some important concepts, such as Web Components, Client-side routing, and State Management, and how to implement them using vanilla JavaScript.
 
 The course explored different patterns and techniques, focusing in giving you the tools to build a single-page application without the need of a framework.
 
