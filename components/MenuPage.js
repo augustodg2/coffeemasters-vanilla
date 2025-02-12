@@ -1,3 +1,10 @@
+let css;
+
+async function loadCSS() {
+  const request = await fetch("/components/MenuPage.css");
+  css = await request.text();
+}
+
 export class MenuPage extends HTMLElement {
   constructor() {
     super();
@@ -6,13 +13,13 @@ export class MenuPage extends HTMLElement {
     const style = document.createElement("style");
     this.root.appendChild(style);
 
-    async function loadCSS() {
-      const request = await fetch("/components/MenuPage.css");
-      const css = await request.text();
+    if (css) {
       style.textContent = css;
+    } else {
+      loadCSS().then(() => {
+        style.textContent = css;
+      });
     }
-
-    loadCSS();
   }
 
   connectedCallback() {

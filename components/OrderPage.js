@@ -1,3 +1,10 @@
+let css;
+
+async function loadCSS() {
+  const request = await fetch("/components/OrderPage.css");
+  css = await request.text();
+}
+
 export class OrderPage extends HTMLElement {
   #user = {
     name: "",
@@ -10,15 +17,18 @@ export class OrderPage extends HTMLElement {
 
     this.root = this.attachShadow({ mode: "open" });
     const styles = document.createElement("style");
+
+    if (css) {
+      styles.textContent = css;
+    } else {
+      loadCSS().then(() => {
+        styles.textContent = css;
+      });
+    }
+
     this.root.appendChild(styles);
     const section = document.createElement("section");
     this.root.appendChild(section);
-
-    async function loadCSS() {
-      const request = await fetch("/components/OrderPage.css");
-      styles.textContent = await request.text();
-    }
-    loadCSS();
   }
 
   connectedCallback() {
