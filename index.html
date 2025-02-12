@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width" />
     <title>Coffee Masters</title>
 
+    <!-- defer: the browser will download the script, but only execute it at the end of the document parsing
+        so it won't block the rendering of the page
+
+        async: the browser will download the script, and execute it as soon as it's downloaded
+        good for scripts that don't depend on the DOM and that really need to be executed as soon as possible
+        for example, analytics scripts
+    -->
+    <script src="app.js" defer></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
