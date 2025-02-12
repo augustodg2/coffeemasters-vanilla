@@ -1,3 +1,9 @@
+import { loadData } from "./services/Menu.js";
+import Store from "./services/Store.js";
+
+window.app = {};
+app.store = Store;
+
 /* Browsers might have finished parsing, but is still constructing the DOM
  * So it's better to wait for the DOMContentLoaded event for DOM manipulation
  *
@@ -5,10 +11,6 @@
  * is fired when the whole page has loaded, including all dependent resources such
  * as stylesheets, images and videos.
  */
-window.addEventListener("DOMContentLoaded", function () {
-  const nav = document.querySelector("nav");
-  nav.innerHTML = `
-    <h2>Hello World</h2>
-    <p>This was loaded using JavaScript</p>
-  `;
+window.addEventListener("DOMContentLoaded", async () => {
+  loadData();
 });
