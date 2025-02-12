@@ -39,7 +39,6 @@ export class MenuPage extends HTMLElement {
         liCategory.innerHTML = `
                 <h3>${category.name}</h3>
                 <ul class="category">
-                
                 </ul>
             `;
 

@@ -17,3 +17,12 @@ app.router = Router;
 window.addEventListener("DOMContentLoaded", async () => {
   app.router.init();
 });
+
+window.addEventListener("appcartchange", (event) => {
+  const badge = document.getElementById("badge");
+
+  const quantity = app.store.cart.reduce((acc, item) => acc + item.quantity, 0);
+
+  badge.textContent = quantity;
+  badge.hidden = quantity == 0;
+});
