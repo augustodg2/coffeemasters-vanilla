@@ -10,8 +10,6 @@ export const routes = [
     path: "/order",
     getElement: () => {
       const pageElement = document.createElement("order-page");
-      pageElement.textContent = "Your Order";
-
       return pageElement;
     },
   },
@@ -19,7 +17,6 @@ export const routes = [
     path: "/product/{id}",
     getElement: (params) => {
       const pageElement = document.createElement("details-page");
-      pageElement.textContent = "Details";
 
       Object.assign(pageElement.dataset, {
         ...pageElement.dataset,
