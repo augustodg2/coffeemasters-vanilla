@@ -16,7 +16,7 @@ export const routes = [
     },
   },
   {
-    path: "/details/{id}",
+    path: "/product/{id}",
     getElement: (params) => {
       const pageElement = document.createElement("details-page");
       pageElement.textContent = "Details";
