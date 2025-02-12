@@ -19,6 +19,7 @@ export class MenuPage extends HTMLElement {
     const template = document.getElementById("menu-page-template");
     const content = template.content.cloneNode(true);
     this.root.appendChild(content);
+    loadData();
   }
 }
 
