@@ -1,8 +1,10 @@
 import { loadData } from "./services/Menu.js";
+import Router from "./services/Router.js";
 import Store from "./services/Store.js";
 
 window.app = {};
 app.store = Store;
+app.router = Router;
 
 /* Browsers might have finished parsing, but is still constructing the DOM
  * So it's better to wait for the DOMContentLoaded event for DOM manipulation
@@ -13,4 +15,5 @@ app.store = Store;
  */
 window.addEventListener("DOMContentLoaded", async () => {
   loadData();
+  app.router.init();
 });
